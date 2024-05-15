@@ -12,7 +12,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { ListApi } from 'tweakpane'
+import { ListBladeApi } from 'tweakpane'
 import { PaneInstance } from './useTweakpane'
 
 interface UseSliderBladeParams<T> extends BaseBladeParams {
@@ -25,13 +25,13 @@ interface UseSliderBladeParams<T> extends BaseBladeParams {
 export function useListBlade<T extends Object, V>(
   paneRef: MutableRefObject<PaneInstance<T>>,
   bladeParams: UseSliderBladeParams<V>
-): [V, (value: V) => void, MutableRefObject<ListApi<V>>]
+): [V, (value: V) => void, MutableRefObject<ListBladeApi<V>>]
 
 export function useListBlade<T extends Object, V>(
   paneRef: MutableRefObject<PaneInstance<T>>,
   bladeParams: UseSliderBladeParams<V>,
   onChange: (event: TpChangeEvent<V>) => void
-): [never, (value: V) => void, MutableRefObject<ListApi<V>>]
+): [never, (value: V) => void, MutableRefObject<ListBladeApi<V>>]
 
 export function useListBlade<T extends Object, V>(
   paneRef: MutableRefObject<PaneInstance<T>>,
@@ -40,7 +40,7 @@ export function useListBlade<T extends Object, V>(
 ) {
   const [value, set] = useState<V>(params.value)
 
-  const bladeRef = useRef<ListApi<V>>(null!)
+  const bladeRef = useRef<ListBladeApi<V>>(null!)
 
   const callbackRef = useRef(onChange)
   callbackRef.current = onChange
@@ -74,7 +74,7 @@ export function useListBlade<T extends Object, V>(
     if (pane == null) return
 
     params.view = params.view || 'list'
-    const blade = pane.addBlade(params) as ListApi<V>
+    const blade = pane.addBlade(params) as ListBladeApi<V>
 
     blade.on('change', handler)
     bladeRef.current = blade

@@ -1,4 +1,4 @@
-import { InputBindingApi, InputParams, TpChangeEvent } from '@tweakpane/core'
+import { InputBindingApi, BindingParams, TpChangeEvent } from '@tweakpane/core'
 
 import {
   RefObject,
@@ -17,11 +17,11 @@ type InputRef<T> = RefObject<InputBindingApi<unknown, T>>
 export function usePaneInput<T extends Object, K extends keyof T>(
   ref: RefObject<FolderInstance<T>>,
   key: K,
-  inputParams: InputParams | undefined,
+  BindingParams: BindingParams | undefined,
   onChange: (event: TpChangeEvent<T[K]>) => void
 ): [never, (value: T[K]) => void, InputRef<T[K]>]
 
-// Skips inputParams
+// Skips BindingParams
 /** Does not return the value and doesn't trigger an update because onChange is specified */
 export function usePaneInput<T extends Object, K extends keyof T>(
   paneRef: RefObject<FolderInstance<T>>,
@@ -35,14 +35,14 @@ export function usePaneInput<T extends Object, K extends keyof T>(
 export function usePaneInput<T extends Object, K extends keyof T>(
   paneRef: RefObject<FolderInstance<T>>,
   key: K,
-  inputParams?: InputParams | undefined,
+  BindingParams?: BindingParams | undefined,
   onChange?: undefined
 ): [T[K], (value: T[K]) => void, InputRef<T[K]>]
 
 export function usePaneInput<T extends Object, K extends keyof T>(
   paneRef: RefObject<FolderInstance<T>>,
   key: K,
-  inputParams?: InputParams | undefined,
+  BindingParams?: BindingParams | undefined,
   onChange?: undefined
 ): [T[K], (value: T[K]) => void, InputRef<T[K]>]
 
@@ -50,12 +50,12 @@ export function usePaneInput<T extends Object, K extends keyof T>(
   parentRef: RefObject<FolderInstance<T>>,
   key: K,
   inputParamsArg:
-    | InputParams
+    | BindingParams
     | ((event: TpChangeEvent<T[K]>) => void)
     | undefined = {},
   onChangeArg: ((event: TpChangeEvent<T[K]>) => void) | undefined = undefined
 ) {
-  const inputParams = typeof inputParamsArg === 'function' ? {} : inputParamsArg
+  const BindingParams = typeof inputParamsArg === 'function' ? {} : inputParamsArg
   const onChange =
     typeof inputParamsArg === 'function' ? inputParamsArg : onChangeArg
 
@@ -67,13 +67,14 @@ export function usePaneInput<T extends Object, K extends keyof T>(
   callbackRef.current = onChange
 
   const setValue = useCallback((value: T[K]) => {
-    inputRef.current.controller_.binding.target.write(value)
+    // inputRef.current.controller_.binding.target.write(value)
+    inputRef.current.controller.value.binding.write(value)
     inputRef.current.refresh()
   }, [])
 
   if (inputRef.current) {
-    inputRef.current.hidden = Boolean(inputParams.hidden)
-    inputRef.current.disabled = Boolean(inputParams.disabled)
+    inputRef.current.hidden = Boolean(BindingParams.hidden)
+    inputRef.current.disabled = Boolean(BindingParams.disabled)
   }
 
   useLayoutEffect(() => {
@@ -85,11 +86,11 @@ export function usePaneInput<T extends Object, K extends keyof T>(
       : (event) => set(event.value)
 
     const input = pane
-      .addInput(parentRef.current!.params, key, inputParams)
+      .addBinding(parentRef.current!.params, key, BindingParams)
       .on('change', handler)
-
+      
     inputRef.current = input
-
+    // inputRef.current.controller.importState.arguments = input
     return () => {
       if (input.element) input.dispose()
     }

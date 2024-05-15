@@ -6,7 +6,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { BaseBladeParams, TextApi, TpChangeEvent } from 'tweakpane'
+import { BaseBladeParams, TextBladeApi, TpChangeEvent } from 'tweakpane'
 import { FolderInstance } from './usePaneFolder'
 
 interface UseTextBladeParams<T> extends BaseBladeParams {
@@ -16,7 +16,7 @@ interface UseTextBladeParams<T> extends BaseBladeParams {
   label?: string
 }
 
-type BladeRef<V> = MutableRefObject<TextApi<V>>
+type BladeRef<V> = MutableRefObject<TextBladeApi<V>>
 
 export function useTextBlade<T extends Object, V>(
   paneRef: MutableRefObject<FolderInstance<T>>,
@@ -36,7 +36,7 @@ export function useTextBlade<T extends Object, V>(
 ) {
   const [value, set] = useState<V>(params.value)
 
-  const bladeRef = useRef<TextApi<V>>(null!)
+  const bladeRef = useRef<TextBladeApi<V>>(null!)
 
   const callbackRef = useRef(onChange)
   callbackRef.current = onChange
@@ -60,7 +60,7 @@ export function useTextBlade<T extends Object, V>(
     if (pane == null) return
 
     params.view = params.view || 'text'
-    const blade = pane.addBlade(params) as TextApi<V>
+    const blade = pane.addBlade(params) as TextBladeApi<V>
 
     const handler: (ev: TpChangeEvent<V>) => void = onChange
       ? (event) => callbackRef.current!(event)

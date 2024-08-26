@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from 'react'
-import { SliderApi } from 'tweakpane'
+import { SliderBladeApi } from 'tweakpane'
 import { FolderInstance } from './usePaneFolder'
 
 interface UseSliderBladeParams extends BaseBladeParams {
@@ -19,7 +19,7 @@ interface UseSliderBladeParams extends BaseBladeParams {
   value?: number
 }
 
-type BladeRef = MutableRefObject<SliderApi>
+type BladeRef = MutableRefObject<SliderBladeApi>
 
 export function useSliderBlade<T extends Object, V>(
   paneRef: MutableRefObject<FolderInstance<T>>,
@@ -39,7 +39,7 @@ export function useSliderBlade<T extends Object>(
 ) {
   const [value, set] = useState<number>(params.value || 0)
 
-  const bladeRef = useRef<SliderApi>(null!)
+  const bladeRef = useRef<SliderBladeApi>(null!)
 
   const callbackRef = useRef(onChange)
   callbackRef.current = onChange
@@ -50,8 +50,8 @@ export function useSliderBlade<T extends Object>(
     blade.disabled = Boolean(params.disabled)
     blade.hidden = Boolean(params.hidden)
     blade.label = params.label
-    blade.maxValue = params.max
-    blade.minValue = params.min
+    blade.max = params.max
+    blade.min = params.min
     blade.value = params.value || 0
   }, [
     params.disabled,
@@ -71,7 +71,7 @@ export function useSliderBlade<T extends Object>(
     if (pane == null) return
 
     params.view = params.view || 'slider'
-    const blade = pane.addBlade(params) as SliderApi
+    const blade = pane.addBlade(params) as SliderBladeApi
 
     const handler: (ev: TpChangeEvent<number>) => void = onChange
       ? (event) => callbackRef.current!(event)

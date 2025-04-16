@@ -1,12 +1,13 @@
 import { OrbitControls, PerspectiveCamera, Sky, Stats } from '@react-three/drei'
 import { Canvas } from '@react-three/fiber'
-import React, { useRef } from 'react'
+import React, { useRef, useState } from 'react'
 import { Color, Mesh, MeshStandardMaterial, Vector3 } from 'three'
 import {
   useListBlade,
   usePaneFolder,
   usePaneInput,
   useSliderBlade,
+  useButtonBlade,
   useTextBlade,
   useTweakpane,
 } from '../src'
@@ -14,6 +15,7 @@ import './index.css'
 
 export function App() {
   const meshRef = useRef<Mesh>(null!)
+  const [fruitCount, setFruitCount] = useState(0)
 
   const pane = useTweakpane(
     {
@@ -71,6 +73,13 @@ export function App() {
     ],
     value: 'box',
     view: 'list',
+  })
+
+  useButtonBlade(pane, {
+    title: 'Add Fruit',
+    label: 'Counter'
+  }, () => {
+    setFruitCount(prev => prev + 1)
   })
 
   const folder = usePaneFolder(pane, {
@@ -170,7 +179,7 @@ export function App() {
       </Canvas>
       <div className="tooltip">
         <h1>
-          {title} {fruit}
+          {title} {fruit} {fruitCount}
         </h1>
       </div>
     </div>

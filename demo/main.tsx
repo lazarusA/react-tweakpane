@@ -23,6 +23,7 @@ export function App() {
       rotation: { x: 0, y: 0, z: 0 },
       scale: { x: 1, y: 1, z: 1 },
       color: '#ffa500',
+      bool: false,
     },
     {
       title: 'Scene Settings',
@@ -82,6 +83,15 @@ export function App() {
     setFruitCount(prev => prev + 1)
   })
 
+  const [outBool] = usePaneInput(
+    pane,
+    'bool',
+    {
+      label: 'Boolean',
+      value: false
+    }
+  )
+  
   const folder = usePaneFolder(pane, {
     title: 'Box Settings',
   })
@@ -179,7 +189,7 @@ export function App() {
       </Canvas>
       <div className="tooltip">
         <h1>
-          {title} {fruit} {fruitCount}
+          {title} {fruit} {fruitCount} {outBool ? '✓' : '✗'}
         </h1>
       </div>
     </div>

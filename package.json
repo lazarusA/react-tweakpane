@@ -61,5 +61,8 @@
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     }
+  },
+  "dependencies": {
+    "@tweakpane/plugin-essentials": "^0.2.1"
   }
 }

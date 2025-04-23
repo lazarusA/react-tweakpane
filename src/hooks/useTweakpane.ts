@@ -1,5 +1,6 @@
 import { RefObject, useEffect, useLayoutEffect, useRef } from 'react'
 import { Pane } from 'tweakpane'
+import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
 
 // This one is copied from tweakpane to avoid dist dependency
 interface PaneConfig {
@@ -46,6 +47,7 @@ export function useTweakpane<T extends Object>(
 
   useLayoutEffect(() => {
     const pane = new Pane(paneConfig)
+    pane.registerPlugin(EssentialsPlugin)
     paneRef.current.instance = pane
 
     return () => {

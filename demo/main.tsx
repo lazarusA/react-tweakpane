@@ -9,12 +9,9 @@ import {
   useSliderBlade,
   useButtonBlade,
   useTextBlade,
-  useTabBlade,
   useTweakpane,
-  asFolderInstance
 } from '../src'
 import './index.css'
-
 
 export function App() {
   const meshRef = useRef<Mesh>(null!)
@@ -32,27 +29,6 @@ export function App() {
       title: 'Scene Settings',
     }
   )
-
-  const { tabs } = useTabBlade(pane, {
-    pages: [
-      { title: 'Parameters' },
-      { title: 'Advanced' }
-    ]
-  })
-
-  // const mainTab = tabs[0]
-
-  // if (!mainTab?.current) return null
-  
-  // usePaneInput(
-  //   asFolderInstance(mainTab),
-  //   'color',
-  //   {
-  //     label: 'Color',
-  //     value: '#ffa500',
-  //     view: 'color',
-  //   },
-  // )
 
   const [time] = useSliderBlade(pane, {
     label: 'Sky',
@@ -119,37 +95,6 @@ export function App() {
   const folder = usePaneFolder(pane, {
     title: 'Box Settings',
   })
-
-  const mytabs = useTabBlade(folder, {
-    pages: [
-      { title: 'Parameters' },
-      { title: 'Advanced' }
-    ]
-  })
-  
-
-// Get the specific tab page instance
-// const tabPage = mytabs.tabs[0].current.instance;
-
-// // If you're trying to add a binding to this tab page
-// if (tabPage) {
-//   // The correct way to add bindings to a tab page
-//   tabPage.addBinding(pane.current.params, 'position', {
-//     label: 'Position',
-//     x: {
-//       min: -6,
-//       max: 6,
-//     },
-//     y: {
-//       min: -6,
-//       max: 6,
-//     },
-//     z: {
-//       min: -6,
-//       max: 6,
-//     },
-//   });
-// }
 
   usePaneInput(
     folder,

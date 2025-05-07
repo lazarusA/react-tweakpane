@@ -16,6 +16,8 @@ import './index.css'
 export function App() {
   const meshRef = useRef<Mesh>(null!)
   const [fruitCount, setFruitCount] = useState(0)
+  const [fruitLabel, setFruitLabel] = useState('Fruit')
+  const [selectedFruit, setSelectedFruit] = useState('🍎')
 
   const pane = useTweakpane(
     {
@@ -56,24 +58,35 @@ export function App() {
     format: (value) => value,
   })
 
-  const [fruit] = useListBlade(pane, {
-    label: 'Fruit',
-    options: [
-      {
-        text: 'Apple 🍎',
-        value: '🍎',
-      },
-      {
-        text: 'Orange 🍊',
-        value: '🍊',
-      },
-      {
-        text: 'Banana 🍌',
-        value: '🍌',
-      },
-    ],
-    value: 'box',
+  const fruitOptions = [
+    {
+      text: 'Apple 🍎',
+      value: '🍎',
+    },
+    {
+      text: 'Orange 🍊',
+      value: '🍊',
+    },
+    {
+      text: 'Banana 🍌',
+      value: '🍌',
+    },
+  ]
+
+  useListBlade(pane, {
+    label: fruitLabel,
+    options: fruitOptions,
+    value: selectedFruit,
     view: 'list',
+  }, (event) => {
+    console.log('fruit changed:', event.value)
+    setSelectedFruit(event.value)
+    
+    // Find the text label for the selected fruit
+    const selectedOption = fruitOptions.find(option => option.value === event.value)
+    if (selectedOption) {
+      setFruitLabel(selectedOption.text.split(' ')[0]) // Just use the name part, not the emoji
+    }
   })
 
   useButtonBlade(pane, {
@@ -189,7 +202,7 @@ export function App() {
       </Canvas>
       <div className="tooltip">
         <h1>
-          {title} {fruit} {fruitCount} {outBool ? '✓' : '✗'}
+          {title} {selectedFruit} {fruitCount} {outBool ? '✓' : '✗'}
         </h1>
       </div>
     </div>
